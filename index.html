@@ -2,7 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=  <h1 class="head">Tic-tac-tao</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-tac-tao</title>
+     <style>
+        body {
+            background-color: aliceblue;
+            margin: 0;
+            padding: 0;
+        }
+        .head {
+            text-align: center;
+        }
+        .board {
+            width: fit-content;
+            margin: 50px auto;
+            background-color: yellowgreen;
+            box-shadow: 0 0 10px firebrick;
+            padding: 10px;
+        }
+        .row {
+            display: flex;
+        }
+        .box {
+            background-color: aqua;
+            height: 100px;
+            width: 100px;
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .box:hover {
+            cursor: pointer;
+            box-shadow: 0 0 5px 2px rgb(103, 72, 72);
+        }
+        .currentPlayer{
+ text-align: center;        }
+    </style>
+</head>
+<body>
+    <h1 class="head">Tic-tac-tao</h1>
     <p  class= "currentPlayer"id="currentPlayer">Current Player: X</p>
     <div class="board">
         <div class="row"> 
@@ -20,10 +61,38 @@
             <div class="box" onclick="selectBox(7)"></div>
             <div class="box" onclick="selectBox(8)"></div>
         </div>
-    </div>, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+    </div>
+    <script>
+        const board = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
+        let currentPlayer = "X";
+
+        function renderBoard() {
+            const allBoxes = document.querySelectorAll(".box");
+            allBoxes.forEach((boxElement, i) => {
+                if (board[i] === "O") {
+                    boxElement.innerHTML = '<img src="./img/delete.png" height="60px"/>';
+                } else if (board[i] === "X") {
+                    boxElement.innerHTML = '<img src="./img/zero.png" height="60px"/>';
+                } else {
+                    boxElement.innerHTML = "";
+                }
+            });
+        }
+
+        function selectBox(boxNumber) {
+            if (board[boxNumber] !== -1) {
+                alert("Invalid move");
+                return;
+            }
+            board[boxNumber] = currentPlayer;
+            renderBoard();
+
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            const currentPlayerElement = document.getElementById("currentPlayer");
+            currentPlayerElement.innerHTML = `Current Player: ${currentPlayer}`;
+        }
+
+        renderBoard();
+    </script>
 </body>
 </html>
