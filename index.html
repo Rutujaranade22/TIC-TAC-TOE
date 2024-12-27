@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic-tac-tao</title>
+    <title>Tic-tac-toe</title>
     <link rel="icon" href="./img/tic-tac-toe.png" type="image/png">
     <style>
         body {
-            background-color: aliceblue;
+            font-family: Arial, sans-serif;
+            text-align: center;
             margin: 0;
             padding: 0;
+            background-color: #f5f5f5;
         }
         .head {
             text-align: center;
@@ -25,7 +27,7 @@
             display: flex;
         }
         .box {
-            background-color:#ffccff;
+            background-color: #ffccff;
             height: 100px;
             width: 100px;
             margin: 5px;
@@ -39,14 +41,21 @@
             cursor: pointer;
             box-shadow: 0 0 5px 2px rgb(103, 72, 72);
         }
-        .currentPlayer{
- text-align: center;   
-     }
+        .currentPlayer {
+            text-align: center;   
+        }
+        .restart {
+            padding: 10px 20px;
+            font-size: 15px;
+            cursor: pointer;
+            background-color: #2c3e50;  
+            color: #ecf0f1; 
+        }
     </style>
 </head>
 <body>
-    <h1 class="head" style="color: #921592;">Tic-tac-tao</h1>
-    <p  class= "currentPlayer"id="currentPlayer"><b>Current Player: X</b></p>
+    <h1 class="head" style="color: #921592;">Tic-tac-toe</h1>
+    <p class="currentPlayer" id="currentPlayer"><b>Current Player: X</b></p>
     <div class="board">
         <div class="row"> 
             <div class="box" onclick="selectBox(0)"></div>
@@ -64,37 +73,72 @@
             <div class="box" onclick="selectBox(8)"></div>
         </div>
     </div>
+    <button class="restart" id="restart" onclick="resetBoard()">Restart</button>
+
     <script>
-        const board = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
-        let currentPlayer = "X";
+        const board = Array(9).fill(-1); // Initialize the board with empty values
+        let currentPlayer = "X"; // Start with player X
 
         function renderBoard() {
             const allBoxes = document.querySelectorAll(".box");
-            allBoxes.forEach((boxElement, i) => {
-                if (board[i] === "O") {
-                    boxElement.innerHTML = '<img src="./img/delete.png" height="60px"/>';
-                } else if (board[i] === "X") {
-                    boxElement.innerHTML = '<img src="./img/zero.png" height="60px"/>';
+            allBoxes.forEach((box, index) => {
+                if (board[index] === "X") {
+                    box.innerHTML = '<img src="./img/zero.png" height="60px"/>';
+                } else if (board[index] === "O") {
+                    box.innerHTML = '<img src="./img/delete.png" height="60px"/>';
                 } else {
-                    boxElement.innerHTML = "";
+                    box.innerHTML = ""; // Clear the box if empty
                 }
             });
         }
 
-        function selectBox(boxNumber) {
-            if (board[boxNumber] !== -1) {
-                alert("Invalid move");
+        function selectBox(index) {
+            if (board[index] !== -1) {
+                alert("Invalid move! This box is already taken.");
                 return;
             }
-            board[boxNumber] = currentPlayer;
+
+            board[index] = currentPlayer; // Mark the current player's move
             renderBoard();
 
+            if (checkWinner()) {
+                alert(`${currentPlayer} wins!`);
+                resetBoard();
+                return;
+            }
+
+            if (board.every(cell => cell !== -1)) { // Check for a tie
+                alert("It's a tie!");
+                resetBoard();
+                return;
+            }
+
+            // Switch players
             currentPlayer = currentPlayer === "X" ? "O" : "X";
-            const currentPlayerElement = document.getElementById("currentPlayer");
-            currentPlayerElement.innerHTML = `Current Player: <b>${currentPlayer}</b>`;
+            document.getElementById("currentPlayer").innerText = `Current Player: ${currentPlayer}`;
         }
 
-        renderBoard();
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6]            // Diagonals
+            ];
+
+            return winningCombinations.some(combination => {
+                const [a, b, c] = combination;
+                return board[a] !== -1 && board[a] === board[b] && board[b] === board[c];
+            });
+        }
+
+        function resetBoard() {
+            board.fill(-1); // Clear the board
+            renderBoard();
+            currentPlayer = "X"; // Reset the current player
+            document.getElementById("currentPlayer").innerText = `Current Player: ${currentPlayer}`;
+        }
+
+        renderBoard(); // Initialize the game board
     </script>
 </body>
 </html>
