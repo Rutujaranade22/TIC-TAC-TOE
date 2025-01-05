@@ -83,9 +83,9 @@
             const allBoxes = document.querySelectorAll(".box");
             allBoxes.forEach((box, index) => {
                 if (board[index] === "X") {
-                    box.innerHTML = '<img src="./img/zero.png" height="60px"/>';
-                } else if (board[index] === "O") {
                     box.innerHTML = '<img src="./img/delete.png" height="60px"/>';
+                } else if (board[index] === "O") {
+                    box.innerHTML = '<img src="./img/zero.png" height="60px"/>';
                 } else {
                     box.innerHTML = ""; // Clear the box if empty
                 }
